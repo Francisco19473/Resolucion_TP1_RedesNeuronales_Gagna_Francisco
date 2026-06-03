@@ -1,6 +1,6 @@
 # Clasificación de Melanomas - Exploración de Hiperparámetros (470 Modelos)
 
-Este repositorio contiene el código de entrenamiento, el código para visulización del dataset, las respuestas al cuestionario teórico, un informe y el registro de entrenamientos realizados tanto en MLflow (archivo .zip en el repositorio), como en Tensorboard (archivo .zip en ruta externa al repositorio).
+Este repositorio contiene el código de entrenamiento, el código para visulización del dataset, los requirementes para la ejecución de los códigos mencionados, un informe, las respuestas al cuestionario teórico y el registro de entrenamientos realizados tanto en MLflow (archivo .zip en el repositorio), como en Tensorboard (archivo .zip en ruta externa al repositorio).
 
 ---
 
@@ -15,7 +15,7 @@ Para facilitar la corrección y respetar las limitaciones de almacenamiento de G
 ### 2. Historial Intra-Modelo (TensorBoard)
 Debido a que la ejecución secuencial de los entrenamientos generó un único archivo binario consolidado de 1.2 GB (`events.out.tfevents`), superando las restricciones físicas de GitHub, este registro histórico se encuentra alojado en una nube externa.
 
-* **Carpeta de Descarga Directa:** [Acceder a la carpeta en Google Drive](PON_ACA_EL_LINK_DE_TU_CARPETA_DE_DRIVE)
+* **Carpeta de Descarga Directa:** [Acceder a la carpeta en Google Drive](https://drive.google.com/file/d/1BGHS_IxxujH3PpSYiwzIva7UIgYA9JtT/view?usp=sharing)
 * **Archivo específico a descargar:** `events.out.tfevents.1780335932...`
 
 #### Cómo visualizar los logs de TensorBoard localmente:
