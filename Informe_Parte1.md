@@ -36,7 +36,7 @@ A partir de la grilla de hiperparámetros definida por las restricciones morfol�
 
 **1\. Exploración Global**
 
-El análisis macroscópico mediante un diagrama de dispersión entre el _val_accuracy_ y la brecha de sobreajuste (_overfitting_gap_) reveló una alta concentración de experimentos en el rango del 45% al 63% de exactitud en validación. Un volumen significativo de arquitecturas eficientes (55%-63%) exhibió brechas negativas (Gap<0), Si bien una brecha negativa en niveles bajos de exactitud puede sugerir un subajuste prematuro (_underfitting_) inducido por la detención temprana (_Early Stopping_), la concentración de estos puntos en los rangos más altos de rendimiento (55%−63%) tiende a mitigar esta hipótesis de manera generalizada. Este fenómeno podría responder, en cambio, a la asimetría de dificultad entre los conjuntos: el proceso de aumentación estocástica (Albumentations) complejiza el espacio de aprendizaje en el entrenamiento, forzando a la red a extraer características robustas. Al evaluar el modelo sobre el conjunto de validación (exento de perturbaciones), este suele exhibir una capacidad de generalización optimizada, reflejándose en una brecha matemática negativa. Se evidencia un límite superior para el _val_accuracy_ en torno al 65%.
+El análisis macroscópico mediante un diagrama de dispersión entre el _val_accuracy_ y la brecha de sobreajuste (_overfitting_gap_) reveló una alta concentración de experimentos en el rango del 45% al 63% de exactitud en validación. Un volumen significativo de arquitecturas eficientes (55%-63%) exhibió brechas negativas (Gap<0), Si bien una brecha negativa en niveles bajos de exactitud puede sugerir un subajuste prematuro (_underfitting_) inducido por la detención temprana (_Early Stopping_), la concentración de estos puntos en los rangos más altos de rendimiento (55%−63%) tiende a mitigar esta hipótesis de manera generalizada. Este fenómeno podría responder, en cambio, a la asimetría de dificultad entre los conjuntos: el proceso de aumentación estocástica (Albumentations) complejiza el espacio de aprendizaje en el entrenamiento, forzando a la red a extraer características robustas. Al evaluar el modelo sobre el conjunto de validación (exento de perturbaciones), este suele exhibir una capacidad de generalización optimizada, reflejándose en una brecha negativa. Se evidencia un límite superior para el _val_accuracy_ en torno al 65%.
 
 ![Imagen 4](images/scatter_plot.jpg)
 
@@ -52,21 +52,21 @@ Al aislar el impacto de las variables individuales mediante el análisis de coor
 
 ![Imagen 6](images/lineasparalelas_shift.jpg)
 
-- **Complejidad Arquitectónica (hidden_layers):** La topología profunda \[512, 128\] consolidó el máximo rendimiento absoluto (65.85%) debido a su alta expresividad matemática, aunque a costa de una mayor varianza. Por el contrario, la variante monocapa \[128\] estabilizó homogéneamente sus modelos en el rango del 58%-62% con brechas controladas, emergiendo como una alternativa más robusta.
+- **Complejidad Arquitectónica (hidden_layers):** La topología profunda \[512, 128\] consolidó el máximo rendimiento absoluto (65.85%), teniendo además un mayor número de modelos estables, respecto de la variante monocapa \[128\] que cuenta con cuatro modelos en el rango del 58%-62% con brechas controladas.
 
 ![Imagen 7](images/lineasparalelas_hiddenlayers.jpg)
 
-- **Dimensión de Entrada (input_size):** Contraintuitivamente, el modelo óptimo absoluto emergió de una resolución reducida de 64×64 píxeles, mientras que el pelotón de alta eficiencia se distribuyó equitativamente entre las dimensiones de 64 y 128. Trabajar con vectores pequeños redujo el ruido por píxel y los parámetros ponderados, actuando como un regularizador implícito.
+- **Dimensión de Entrada (input_size):** Contraintuitivamente, el modelo óptimo absoluto emergió de una resolución reducida de 64×64 píxeles, mientras que el conjunto de alta eficiencia se distribuyó equitativamente entre las dimensiones de 64 y 128.
 
 ![Imagen 8](images/lineasparalelas_inputsize.jpg)
 
-- **Tamaño de Lote (batch_size) y Optimización:** Excluyendo al líder absoluto entrenado con lote de 16, las soluciones óptimas se distribuyeron de manera simétrica entre lotes pequeños (16) y grandes (64), Esta paridad numérica sugiere que el tamaño del lote no operó como un factor crítico ni condicionante para la convergencia del pipeline en la zona de alta generalización. En las condiciones estocásticas del experimento, tanto la dinámica de gradientes más suaves y estables de un lote mayor (64) como el régimen de mayor exploración por ruido térmico de un lote menor (16) demostraron una aptitud matemática equivalente para guiar a las redes hacia mínimos locales de similar calidad. Respecto al algoritmo, existió paridad absoluta en el pelotón estable entre SGD y RMSprop, diferenciándose únicamente en que este último logró el pico aislado del modelo outlier.
+- **Tamaño de Lote (batch_size) y Optimización:** Excluyendo al líder absoluto entrenado con lote de 16, las soluciones óptimas se distribuyeron de manera simétrica entre lotes pequeños (16) y grandes (64), Esta paridad numérica sugiere que los tamaños de lote analizados no operaron como un factor crítico ni condicionante para la convergencia del pipeline en la zona de alta generalización. Respecto al algoritmo de optimización, existió paridad en el conjunto estable de modelos entre SGD y RMSprop, diferenciándose únicamente en que este último logró el pico aislado del modelo outlier.
 
 ![Imagen 9](images/lineasparalelas_batchsize.jpg)
 
 ![Imagen 10](images/lineasparalelas_optimizer.jpg)
 
-- **Tasa de Aprendizaje (lr):** El sistema exhibió una polarización absoluta hacia el extremo inferior, convergiendo los modelos eficientes principalmente en la tasa mínima de 0.00010. Las configuraciones que exploraron valores cercanos al límite superior (0.01) sufrieron una degradación sistémica en la validación o fueron descartadas de forma automática por exceder las cotas de sobreajuste permitidas.
+- **Tasa de Aprendizaje (lr):** El sistema exhibió una polarización hacia el extremo inferior, convergiendo los modelos eficientes principalmente en la tasa mínima de 0.00010. Las configuraciones que exploraron valores cercanos al límite superior (0.01) sufrieron una degradación sistémica en la validación o fueron descartadas de forma automática por exceder las cotas de sobreajuste permitidas.
 
 ![Imagen 11](images/lineasparalelas_lr.jpg)
 
@@ -74,7 +74,7 @@ Al aislar el impacto de las variables individuales mediante el análisis de coor
 
 ![Imagen 12](images/lineasparalelas_resizestrategy.jpg)
 
-- **Regularización (Weight Decay y Dropout):** Se identificó una marcada ventaja al prescindir de regularizadores internos excesivos. El modelo de máxima precisión se consolidó con un decaimiento sutil de 0.00010 y un Dropout = 0.00000. Las tasas de abandono del 20% redujeron drásticamente la capacidad de aprendizaje en capas ocultas compactas, interfiriendo negativamente en la convergencia debido a que el pipeline ya se encontraba fuertemente regularizado de forma externa por _Albumentations_.
+- **Regularización (Weight Decay y Dropout):** Se identificó una marcada ventaja al prescindir de regularizadores internos excesivos. El modelo de máxima precisión se consolidó con un decaimiento de 0.00010 y un Dropout = 0.00000. Las tasas de abandono del 20% redujeron drásticamente la capacidad de aprendizaje en capas ocultas compactas, interfiriendo negativamente en la convergencia debido a que el pipeline ya se encontraba fuertemente regularizado de forma externa por _Albumentations_.
 
 ![Imagen 13](images/lineasparalelas_weightdecay.jpg)
 
@@ -104,7 +104,7 @@ A partir de las restricciones del embudo experimental, se aislaron tres configur
 
 ![Imagen 20](images/class_report_menor.jpg)
 
-**2\. Veredicto de Selección y Criterio de Optimización Clínica**
+**2\. Selección y Criterio de Optimización Clínica**
 
 La evaluación experimental permite extraer las siguientes conclusiones: Se constata empíricamente la existencia de un límite intrínseco en la arquitectura, denominado técnicamente como el techo del Perceptrón Multicapa (MLP). Los tres casos analizados demuestran de manera empírica que una red densa tradicional encuentra una barrera matemática natural confinada entre el 62% y el 66% de _Accuracy_ al enfrentarse a este conjunto de datos morfológicos. La paridad observada en los valores de _Macro F1-Score_ (0.66, 0.66 y 0.64) confirma que las fluctuaciones al alza en el _Accuracy_ global no representan una ganancia real en la capacidad discriminativa general del sistema, sino variaciones locales y desplazamientos de los sesgos en las fronteras de decisión interclase.
 
