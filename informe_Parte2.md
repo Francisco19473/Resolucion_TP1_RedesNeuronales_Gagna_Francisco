@@ -21,7 +21,7 @@ Los resultados revelaron un fenómeno de **subajuste crónico inducido**. Un an�
 * Por un lado, una posible pérdida de contexto espacial en las capas terminales del extractor convolucional, donde el uso de un MaxPool estático redujo las matrices de activación, limitando la retención de características críticas (como bordes y asimetrías).
 * Por el otro, una regularización e inducción de ruido excesiva en los canales de color (mediante la aumentación de brillo y contraste), distorsionando una variable médica esencial (Score ABCD).
 
-![Imagen 1](images/barrasporclase.png)
+![Imagen 1](images/scatter_plot_CNN_192.jpg)
 * **Figura 1**: Mapa de dispersión (Validation Accuracy vs. Overfitting Gap) de la primera grilla (192 modelos). Se observa una dispersión caótica con una marcada tendencia hacia gaps negativos de hasta -15% en precisiones elevadas, denotando el subajuste provocado por la pérdida de contexto.*
 
 ---
@@ -32,7 +32,7 @@ A partir de los datos de la Fase 1, se aplicó un criterio de poda jerárquica p
 * **Introducción del Bloque Paramétrico (Conv2D con Stride=2):** Se reemplazó el último bloque de `MaxPool` por una capa convolucional con paso (*stride*) igual a 2. Matemáticamente, esto permite que la red aprenda los pesos de filtrado idóneos para resumir el contexto espacial, en lugar de realizar una operación de máximo estática.
 
 
-![Imagen 1](images/barrasporclase.png)
+![Imagen 2](images/scatter_plot_CNN_64.jpg)
 * **Figura 2**: Mapa de dispersión tras el rediseño de arquitectura (64 modelos). Nótese el achatamiento drástico de la nube de puntos y cómo los modelos se concentran de forma saludable sobre el eje del cero, logrando una transferencia transparente del aprendizaje hacia el set de validación.*
 
 ---
