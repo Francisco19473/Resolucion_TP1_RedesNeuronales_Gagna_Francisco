@@ -29,6 +29,7 @@ Los resultados revelaron un fenómeno de **subajuste crónico inducido**. Un an�
 ### Fase 2: Ajuste Estructural por Convolución Estratégica (64 Modelos)
 A partir de los datos de la Fase 1, se aplicó un criterio de poda jerárquica para reconfigurar la red, reduciendo el espacio de búsqueda a 64 combinaciones controladas:
 * **Desactivación del Ruido Lumínico:** Se eliminó la manipulación de brillo y contraste, devolviendo la fidelidad cromática al set.
+* **Ajuste en la Regularización (Reducción de Dropout):** Se constató que valores altos de dropout limitaban severamente la capacidad de representación de la red. Por ello, se acotó el rango pasando de `[0.1, 0.3, 0.5]` a opciones mucho más conservadoras: `[0.0, 0.1]`, permitiendo una convergencia más fluida.
 * **Introducción del Bloque Paramétrico (Conv2D con Stride=2):** Se reemplazó el último bloque de `MaxPool` por una capa convolucional con paso (*stride*) igual a 2. Matemáticamente, esto permite que la red aprenda los pesos de filtrado idóneos para resumir el contexto espacial, en lugar de realizar una operación de máximo estática.
 
 
@@ -37,6 +38,6 @@ A partir de los datos de la Fase 1, se aplicó un criterio de poda jerárquica p
 
 ---
 
-## Conclusiones 
-El entrenamiento de redes profundas *desde cero (from scratch)* con muestras limitadas impone restricciones en la capacidad de generalización. Alcanzar un **62.0% de Accuracy en Validación** con un comportamiento del gap estabilizado representa una mejora respecto al entrenamiento inicial:
-1. El proceso de optimización en embudo guiado por MLflow permitió aislar los mejores hiperparámetros de la red, aproximando a esta CNN al techo histórico del dataset obtenido mediante Perceptrones Multicapa (66%).
+## Conclusión 
+El entrenamiento de redes profundas *desde cero (from scratch)* con muestras limitadas impone restricciones en la capacidad de generalización. Alcanzar un **62.0% de Accuracy en Validación** con una estabilización del gap representa una mejora respecto al entrenamiento inicial. El proceso de optimización en embudo guiado por MLflow permitió aislar los mejores hiperparámetros de la red (como el régimen óptimo de `Learning Rate = 0.001` coordinado con niveles de `Dropout` mínimos), aproximando a ésta CNN al techo histórico del dataset obtenido mediante el Perceptrón Multicapa (66%).
+
