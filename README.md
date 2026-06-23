@@ -1,4 +1,4 @@
-# Clasificación de Melanomas - Exploración de Hiperparámetros (470 Modelos)
+# Clasificación de Melanomas - Exploración de Hiperparámetros
 
 Este repositorio contiene el código de entrenamiento, el código para visulización del dataset, los requirementes para la ejecución de los códigos mencionados, un informe, las respuestas al cuestionario teórico y el registro de entrenamientos realizados tanto en MLflow (archivo .zip en el repositorio), como en Tensorboard (archivo .zip en ruta externa al repositorio).
 
@@ -9,30 +9,31 @@ Este repositorio contiene el código de entrenamiento, el código para visulizac
 Para facilitar la corrección y respetar las limitaciones de almacenamiento de GitHub frente a un volumen de datos tan grande, los registros se han organizado de la siguiente manera:
 
 ### 1. Monitoreo Global e Inter-Modelo (MLflow)
-* **Ubicación:** mlruns.zip en este repositorio.
-* **Contenido:** Contiene los hiperparámetros, métricas finales y matrices de confusión de los 470 modelos analizados (sin incluir los pesos finales de los modelos para optimizar espacio). Permite realizar el análisis comparativo directo de la búsqueda de hiperparámetros.
+* **Ubicación:** mlruns.zip (MLP) y mlruns2.zip (CNN) en este repositorio.
+* **Contenido:** Contiene los hiperparámetros, métricas finales y matrices de confusión de los modelos analizados (sin incluir los pesos finales de los modelos para optimizar espacio). Permite realizar el análisis comparativo directo de la búsqueda de hiperparámetros.
 
 ### 2. Historial Intra-Modelo (TensorBoard)
-Debido a que la ejecución secuencial de los entrenamientos generó un único archivo binario consolidado de 1.2 GB (`events.out.tfevents`), superando las restricciones físicas de GitHub, este registro histórico se encuentra alojado en una nube externa.
+Debido a que la ejecución secuencial de los entrenamientos generó archivos de gran tamaño (`events.out.tfevents`), superando las restricciones físicas de GitHub, se optó por alojar los registros históricos en una carpeta externa.
 
 * **Carpeta de Descarga Directa:** [Acceder a la carpeta en Google Drive](https://drive.google.com/file/d/1BGHS_IxxujH3PpSYiwzIva7UIgYA9JtT/view?usp=sharing)
-* **Archivo específico a descargar:** `events.out.tfevents.1780335932...`
+
+Las carpetas runs.zip y runs2.zip contiene, respectivamente, los `events.out.tfevents` del entrenamiento de la MLP y la CNN.
 
 #### Cómo visualizar los logs de TensorBoard localmente:
-Si desea inspeccionar las curvas dinámicas por lote y época de los 470 modelos, siga estos pasos:
+Tomando de ejemplo la MLP, para inspeccionar las curvas dinámicas por lote y época de los modelos:
 
-1. Descargue y descomprima el archivo `runs.zip` en la raíz de su espacio de trabajo.
-2. Asegúrese de que la estructura de carpetas quede de la siguiente forma:
+1. Descargar y descomprimir el archivo `runs.zip` en la raíz del espacio de trabajo.
+2. Asegurar que la estructura de carpetas quede de la siguiente forma:
    ```text
    su_proyecto/
    └── runs/
        └── experimento_skin/
            └── events.out.tfevents.1780335932...
-3. Desde su terminal (o el entorno de VS Code), ejecute el comando apuntando al directorio raíz de los experimentos:
+3. Desde la terminal (o el entorno de VS Code), ejecutar el comando apuntando al directorio raíz de los experimentos:
    
    ```
    tensorboard --logdir=runs/experimento_skin            
    ```
    
-4. Abra su navegador e ingrese a la dirección local que le indique la consola (habitualmente http://localhost:6006/).
+4. Abrir el navegador e ingrese a la dirección local que le indique la consola (habitualmente http://localhost:6006/).
    
