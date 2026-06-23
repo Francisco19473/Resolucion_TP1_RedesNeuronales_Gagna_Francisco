@@ -15,7 +15,7 @@ Para facilitar la corrección y respetar las limitaciones de almacenamiento de G
 ### 2. Historial Intra-Modelo (TensorBoard)
 Debido a que la ejecución secuencial de los entrenamientos generó archivos de gran tamaño (`events.out.tfevents`), superando las restricciones físicas de GitHub, se optó por alojar los registros históricos en una carpeta externa.
 
-* **Carpeta de Descarga Directa:** [Acceder a la carpeta en Google Drive](https://drive.google.com/file/d/1BGHS_IxxujH3PpSYiwzIva7UIgYA9JtT/view?usp=sharing)
+* **Carpeta de Descarga Directa:** [Acceder a la carpeta en Google Drive]([https://drive.google.com/file/d/1BGHS_IxxujH3PpSYiwzIva7UIgYA9JtT/view?usp=sharing](https://drive.google.com/drive/folders/13Dp60HT6Ua0aF8IMswLKWCN7pI9dX2zG?usp=sharing))
 
 Las carpetas runs.zip y runs2.zip contiene, respectivamente, los `events.out.tfevents` del entrenamiento de la MLP y la CNN.
 
