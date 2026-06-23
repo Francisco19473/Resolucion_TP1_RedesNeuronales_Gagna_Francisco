@@ -22,7 +22,7 @@ Los resultados revelaron un fenómeno de **subajuste crónico inducido**. Un an�
 * Por el otro, una regularización e inducción de ruido excesiva en los canales de color (mediante la aumentación de brillo y contraste), distorsionando una variable médica esencial (Score ABCD).
 
 ![Imagen 1](images/scatter_plot_CNN_192.jpg)
-* **Figura 1**: Mapa de dispersión (Validation Accuracy vs. Overfitting Gap) de la primera grilla (192 modelos). Se observa una dispersión caótica con una marcada tendencia hacia gaps negativos de hasta -15% en precisiones elevadas, denotando el subajuste provocado por la pérdida de contexto.*
+* **Figura 1**: Mapa de dispersión (Validation Accuracy vs. Overfitting Gap) de la primera grilla (192 modelos).*
 
 ---
 
@@ -33,11 +33,10 @@ A partir de los datos de la Fase 1, se aplicó un criterio de poda jerárquica p
 
 
 ![Imagen 2](images/scatter_plot_CNN_64.jpg)
-* **Figura 2**: Mapa de dispersión tras el rediseño de arquitectura (64 modelos). Nótese el achatamiento drástico de la nube de puntos y cómo los modelos se concentran de forma saludable sobre el eje del cero, logrando una transferencia transparente del aprendizaje hacia el set de validación.*
+* **Figura 2**: Mapa de dispersión tras el rediseño de arquitectura (64 modelos). Nótese la reducción en el gap para los modelos con mayor *Accuracy*.*
 
 ---
 
-## 4. Conclusiones Técnicas
-El entrenamiento de redes profundas *desde cero (from scratch)* con muestras limitadas impone restricciones en la capacidad de generalización. Alcanzar un **62.0% de Accuracy en Validación** con un comportamiento del gap estabilizado representa una validación metodológica exitosa:
-1. Demuestra que delegar el submuestreo espacial a capas convolucionales parametrizadas (`Stride`) preserva los patrones diagnósticos con mayor eficacia que los métodos de *pooling* clásicos.
-2. El proceso de optimización en embudo guiado por MLflow permitió aislar el *sweet spot* de la red (`Learning Rate = 0.001`), aproximando a esta CNN al techo histórico del dataset obtenido mediante Perceptrones Multicapa (66%).
+## Conclusiones 
+El entrenamiento de redes profundas *desde cero (from scratch)* con muestras limitadas impone restricciones en la capacidad de generalización. Alcanzar un **62.0% de Accuracy en Validación** con un comportamiento del gap estabilizado representa una mejora respecto al entrenamiento inicial:
+1. El proceso de optimización en embudo guiado por MLflow permitió aislar los mejores hiperparámetros de la red, aproximando a esta CNN al techo histórico del dataset obtenido mediante Perceptrones Multicapa (66%).
