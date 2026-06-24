@@ -206,25 +206,25 @@ A partir de los mapas de dispersión obtenidos en MLflow, se evidencian dos efec
 
 - Estabilidad del Entrenamiento: El impacto más destacable se observa en la métrica *val_loss*. En ausencia de *Batch Normalization* (False), el modelo sufre inestabilidad matemática, proyectando pérdidas de validación que escalan valores de hasta $1.2×10^{6}$. Por el contrario, al activar BatchNorm (True), la pérdida se estabiliza por completo, convergiendo de manera uniforme y compacta en la vecindad de 0. Esto demuestra empíricamente que centrar y escalar las activaciones intermedias previene la distorsión de magnitudes en las capas profundas.
 
-![Imagen 1](images/barrasporclase.png)
+![Imagen 1](images/batch_vs_valloss.jpg)
 
 - Velocidad y Calidad de la Convergencia: Al garantizar la estabilidad de los gradientes, los modelos con *BatchNorm* logran sostener un régimen de aprendizaje eficiente y progresivo a lo largo de las épocas (registrando sus mejores puntos de control entre las épocas 10 y 23). Esta optimización sostenida permite que los modelos con *BatchNorm* alcancen el límite de performance, concentrando de forma sólida sus métricas en el rango más alto de eficiencia (~63.0% de *val_accuracy*), mientras que los modelos sin *BatchNorm* quedan limitados y dispersos en rendimientos deficientes.
 
-![Imagen 1](images/barrasporclase.png)
+![Imagen 2](images/batch_vs_bestepoch.jpg)
 
-![Imagen 1](images/barrasporclase.png)
+![Imagen 3](images/batch_vs_valaccuracy.jpg)
 
 **¿Cambió la performance de validación al combinar *BatchNorm* con *Dropout*?**
 
-Sí, la combinación de ambos regularizadores modificó la performance de validación, aunque no de forma sinérgica. Al analizar los gráficos de coordenadas paralelas, se observa que la presencia de Batch Normalization es el factor crítico de éxito: cuando se activa individualmente (solobatch.jpg), la red alcanza su rendimiento máximo absoluto, superando el 63% de val_accuracy. 
+Sí, la combinación de ambos regularizadores modificó la performance de validación, aunque no de forma sinérgica. Al analizar los gráficos de coordenadas paralelas, se observa que la presencia de Batch Normalization es el factor crítico de éxito: cuando se activa individualmente, la red alcanza su rendimiento máximo absoluto, superando el 63% de val_accuracy. 
 
-![Imagen 1](images/barrasporclase.png)
+![Imagen 4](images/solobatch.jpg)
 
 Al incorporarle Dropout de 0.50000 (batchydropout.jpg), la performance se mantiene en un rango alto (superior al 55%-60%), pero experimenta una leve degradación frente al uso exclusivo de BN. Esto demuestra que la regularización estocástica introducida por un Dropout tan elevado terminó limitando la capacidad de representación de la red en lugar de favorecerla.
 
-![Imagen 1](images/barrasporclase.png)
+![Imagen 5](images/batchydropout.jpg)
 
-![Imagen 1](images/barrasporclase.png)
+![Imagen 6](images/solodropout.jpg)
 
 **¿Qué combinación de regularizadores dio mejores resultados en tus pruebas?**
 
@@ -236,13 +236,13 @@ Este fenómeno evidencia que, para esta arquitectura y dataset específicos, el 
 
 Sí, se observó un cambio considerable en la métrica *train_loss* al activar la normalización por lotes.
 
-De acuerdo con los gráficos de coordenadas paralelas de MLflow, en ausencia de *Batch Normalization* (batchoff.jpg), el proceso de optimización sufre una inestabilidad severa debido al desajuste de escala en las activaciones intermedias, lo que provoca que varios modelos diverjan y terminen con una *train_loss* del orden de millones.
+De acuerdo con los gráficos de coordenadas paralelas de MLflow, en ausencia de *Batch Normalization*, el proceso de optimización sufre una inestabilidad severa debido al desajuste de escala en las activaciones intermedias, lo que provoca que varios modelos diverjan y terminen con una *train_loss* del orden de millones.
 
-![Imagen 1](images/barrasporclase.png)
+![Imagen 7](images/batchoff.jpg)
 
-Por el contrario, al aplicar Batch Normalization (batchon.jpg), se logra una convergencia absoluta y uniforme de todas las configuraciones evaluadas. La pérdida de entrenamiento se desploma de manera consistente hacia valores mínimos y controlados (en torno a 1.13819). Esto demuestra empíricamente que la técnica estabiliza el flujo de gradientes, garantizando que el optimizador pueda minimizar la función de pérdida de forma efectiva en cada iteración sin importar la combinación de otros regularizadores.
+Por el contrario, al aplicar Batch Normalization, se logra una convergencia absoluta y uniforme de todas las configuraciones evaluadas. La pérdida de entrenamiento se desploma de manera consistente hacia valores mínimos y controlados (en torno a 1.13819). Esto demuestra empíricamente que la técnica estabiliza el flujo de gradientes, garantizando que el optimizador pueda minimizar la función de pérdida de forma efectiva en cada iteración sin importar la combinación de otros regularizadores.
 
-![Imagen 1](images/barrasporclase.png)
+![Imagen 8](images/batchon.jpg)
 
 
 ## **8\. Inicialización de Parámetros**
@@ -269,11 +269,11 @@ La diferencia fundamental radica en cómo calculan la varianza de los pesos seg�
 
 La **Inicialización de Xavier (Glorot)** se aplica en capas con funciones de activación lineales o simétricas respecto al cero (como Tangente Hiperbólica o Sigmoide). Su objetivo es mantener constante la varianza de los datos en ambos sentidos de la red. Para ello, calcula los pesos considerando tanto el número de entradas (fanin​) como el de salidas (fanout​) de la capa específica. En su versión uniforme, los valores se extraen del intervalo:
 
-![Imagen_1](images/formula_1.jpg)
+![Imagen_9](images/formula_1.jpg)
 
 Por el contrario, la **Inicialización de He (Kaiming)** está diseñada para activaciones no lineales y asimétricas que anulan los valores negativos, como la función ReLU. Como ReLU apaga estadísticamente a la mitad de las neuronas en cada paso, He duplica la varianza de los pesos para compensar esa pérdida de información. Además, simplifica el cálculo al ignorar el número de salidas (fanout​) y basarse únicamente en las entradas (fanin​) de la capa. En su versión normal, los pesos se extraen de:
 
-![Imagen_2](images/formula_2.jpg)
+![Imagen_10](images/formula_2.jpg)
 
 **¿Por qué en una red con ReLU suele usarse la inicialización de He?**
 
