@@ -200,6 +200,49 @@ En TensorBoard, el _overfitting_ se identifica mediante el comportamiento diverg
 
 La regularización mejora la generalización al restringir el espacio de hipótesis que la red puede explorar, impidiendo que el modelo se vuelva excesivamente complejo y se adapte al ruido específico del conjunto de entrenamiento. Al penalizar los pesos grandes (L2), desactivar nodos aleatoriamente (Dropout) o estabilizar las distribuciones (BatchNorm), se fuerza al optimizador a encontrar soluciones basadas en las características morfológicas más esenciales y repetitivas de los datos. Esto disminuye la varianza del modelo y garantiza que las fronteras de decisión aprendidas sigan siendo válidas al enfrentarse a datos nuevos que el sistema nunca antes vio.
 
+**¿Qué efecto tuvo *BatchNorm* en la estabilidad y velocidad del entrenamiento?**
+
+A partir de los mapas de dispersión obtenidos en MLflow, se evidencian dos efectos en el comportamiento de la red:
+
+- Estabilidad del Entrenamiento: El impacto más destacable se observa en la métrica *val_loss*. En ausencia de *Batch Normalization* (False), el modelo sufre inestabilidad matemática, proyectando pérdidas de validación que escalan valores de hasta $1.2×10^{6}$. Por el contrario, al activar BatchNorm (True), la pérdida se estabiliza por completo, convergiendo de manera uniforme y compacta en la vecindad de 0. Esto demuestra empíricamente que centrar y escalar las activaciones intermedias previene la distorsión de magnitudes en las capas profundas.
+
+![Imagen 1](images/barrasporclase.png)
+
+- Velocidad y Calidad de la Convergencia: Al garantizar la estabilidad de los gradientes, los modelos con *BatchNorm* logran sostener un régimen de aprendizaje eficiente y progresivo a lo largo de las épocas (registrando sus mejores puntos de control entre las épocas 10 y 23). Esta optimización sostenida permite que los modelos con *BatchNorm* alcancen el límite de performance, concentrando de forma sólida sus métricas en el rango más alto de eficiencia (~63.0% de *val_accuracy*), mientras que los modelos sin *BatchNorm* quedan limitados y dispersos en rendimientos deficientes.
+
+![Imagen 1](images/barrasporclase.png)
+
+![Imagen 1](images/barrasporclase.png)
+
+**¿Cambió la performance de validación al combinar *BatchNorm* con *Dropout*?**
+
+Sí, la combinación de ambos regularizadores modificó la performance de validación, aunque no de forma sinérgica. Al analizar los gráficos de coordenadas paralelas, se observa que la presencia de Batch Normalization es el factor crítico de éxito: cuando se activa individualmente (solobatch.jpg), la red alcanza su rendimiento máximo absoluto, superando el 63% de val_accuracy. 
+
+![Imagen 1](images/barrasporclase.png)
+
+Al incorporarle Dropout de 0.50000 (batchydropout.jpg), la performance se mantiene en un rango alto (superior al 55%-60%), pero experimenta una leve degradación frente al uso exclusivo de BN. Esto demuestra que la regularización estocástica introducida por un Dropout tan elevado terminó limitando la capacidad de representación de la red en lugar de favorecerla.
+
+![Imagen 1](images/barrasporclase.png)
+
+![Imagen 1](images/barrasporclase.png)
+
+**¿Qué combinación de regularizadores dio mejores resultados en tus pruebas?**
+
+La combinación que arrojó los mejores resultados globales en las pruebas fue el uso exclusivo de Batch Normalization (True) sin Dropout (0.00000), alcanzando el techo histórico del experimento con un val_accuracy aproximado del 63.4%.
+
+Este fenómeno evidencia que, para esta arquitectura y dataset específicos, el efecto regularizador implícito de Batch Normalization (al introducir un ligero ruido en las estadísticas del lote durante el entrenamiento) fue más que suficiente para mitigar el sobreajuste. Forzar la inclusión de Dropout en 0.5 actuó como una penalización, restringiendo el flujo de información y resultando en una pérdida de performance frente al óptimo alcanzado por el modelo con BN puro.
+
+**¿Notaste cambios en la loss de entrenamiento al usar *BatchNorm*?**
+
+Sí, se observó un cambio considerable en la métrica *train_loss* al activar la normalización por lotes.
+
+De acuerdo con los gráficos de coordenadas paralelas de MLflow, en ausencia de *Batch Normalization* (batchoff.jpg), el proceso de optimización sufre una inestabilidad severa debido al desajuste de escala en las activaciones intermedias, lo que provoca que varios modelos diverjan y terminen con una *train_loss* del orden de millones.
+
+![Imagen 1](images/barrasporclase.png)
+
+Por el contrario, al aplicar Batch Normalization (batchon.jpg), se logra una convergencia absoluta y uniforme de todas las configuraciones evaluadas. La pérdida de entrenamiento se desploma de manera consistente hacia valores mínimos y controlados (en torno a 1.13819). Esto demuestra empíricamente que la técnica estabiliza el flujo de gradientes, garantizando que el optimizador pueda minimizar la función de pérdida de forma efectiva en cada iteración sin importar la combinación de otros regularizadores.
+
+![Imagen 1](images/barrasporclase.png)
 
 
 ## **8\. Inicialización de Parámetros**
